@@ -1,11 +1,54 @@
-.btn {
-    background-color: blueviolet !important;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;    
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 100vh;
+}
+
+.col-right {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    align-items: center;
+}
+
+.col-main-text {
+    width: 60%;
+}
+
+.col-left {
+    width: 20%;
+}
+
+.buttons {
+    background-color: blueviolet;
+    color: white;
+    height: 50px;
+    margin: 2px;
+    font-size: medium;
+    border: none;
+    width: 70%;
 }
 
 div {
-    /* border: solid; */
+    border: solid white;
 }
 
-textarea {
-    resize: none !important;
+#mainText {
+    resize: inherit;    
+    text-size-adjust: medium;
+    outline: none;
+    overflow: visible;
+    font-size: large;
+
+
+    padding: 5%;
+    width: 100%;
+    height: 100%;
 }
