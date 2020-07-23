@@ -134,9 +134,53 @@ function alternateWords() {
     setText(text);
 }
 
+function alternate() {
+    
+    var text = getText();
+
+    for(var i in text) {
+        let letter = text[parseInt(i)];
+        if(letter.toLowerCase() == letter) {
+            text = subsStr(text, parseInt(i), letter.toUpperCase());            
+        } else {
+            text = subsStr(text, parseInt(i), letter.toLowerCase());        
+        }
+    }
+
+    setText(text);
+}
+
+// ----------------------
+
+function replacing(all = false) {
+    var searchValue = document.getElementById('searchValue').value;
+    var newValue = document.getElementById('newValue').value;
+    var diff = document.getElementById('checkDiff').checked;
+
+    var regVal = '';
+    var reg;
+
+    var text = getText();
+
+    if(all == true) {
+        regVal = regVal + 'g';
+    }
+
+    if(diff == false) {
+        regVal = regVal + 'i';
+    }
+    
+    reg = new RegExp(searchValue, regVal);
+    text = text.replace(reg, newValue);
+    setText(text);
+}
+
 document.getElementById('btn-1').addEventListener('click', upper);
 document.getElementById('btn-2').addEventListener('click', lower);
 document.getElementById('btn-3').addEventListener('click', upperWords);
 document.getElementById('btn-4').addEventListener('click', upperPhrases);
 document.getElementById('btn-5').addEventListener('click', alternateLetters);
 document.getElementById('btn-6').addEventListener('click', alternateWords);
+document.getElementById('btn-7').addEventListener('click', alternate);
+document.getElementById('btn-8').addEventListener('click', () => {replacing(false);});
+document.getElementById('btn-9').addEventListener('click', () => {replacing(true);});

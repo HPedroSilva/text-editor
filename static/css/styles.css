@@ -33,7 +33,20 @@
     margin: 2px;
     font-size: medium;
     border: none;
-    width: 70%;
+    width: 85%;
+}
+
+.typography, .replace{    
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+.inputs {
+    margin: 2px;
+    width: 85%;
+    height: 25px;
 }
 
 div {
