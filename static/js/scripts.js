@@ -1,16 +1,17 @@
 function getText(getSelected = false) {
     var text = {
         text: '',
-        start: -1
+        selection: '',
+        startSel: -1
     };
 
     if(getSelected == true && document.getSelection().toString() != '' && document.getSelection().anchorNode.id == 'mainText_div') {
-        text.text = document.getSelection().toString();
-        text.start = parseInt(document.getElementById('mainText').selectionStart);
-    } else {        
-        text.text = document.getElementById('mainText').value;    
-    }
-
+        text.selection = document.getSelection().toString();
+        text.startSel = parseInt(document.getElementById('mainText').selectionStart);
+    }     
+    
+    text.text = document.getElementById('mainText').value;    
+    
     return text;
 }
 
@@ -27,8 +28,8 @@ setText = (text) => document.getElementById('mainText').value = text;
 function upper() {    
     var text = getText(true);    
 
-    if (text.start != -1) {
-        setText(subsStr(text.text, text.start, text.text.toUpperCase()));
+    if (text.startSel != -1) {
+        setText(subsStr(text.text, text.startSel, text.selection.toUpperCase()));
     } else {
         setText(text.text.toUpperCase());
     }
@@ -37,8 +38,8 @@ function upper() {
 function lower() {    
     var text = getText(true);    
 
-    if (text.start != -1) {
-        setText(subsStr(text.text, text.start, text.text.toLowerCase()));
+    if (text.startSel != -1) {
+        setText(subsStr(text.text, text.startSel, text.selection.toLowerCase()));
     } else {
         setText(text.text.toLowerCase());
     }
@@ -108,15 +109,23 @@ function upperWords() {
 }
 
 function alternateLetters() {
-    var text = getText().text;
+    var text = getText(true);
+    var newText;
 
-    for(var i in text) {
+    if (text.startSel != -1) {
+        newText = text.selection;    
+    } else {
+        newText = text.text;
+        text.startSel = 0;
+    }
+
+    for(var i in newText) {
         if(parseInt(i) % 2 == 0) {
-            text = subsStr(text, parseInt(i), text[parseInt(i)].toUpperCase());
+            newText = subsStr(newText, parseInt(i), newText[parseInt(i)].toUpperCase());
         }        
     }
 
-    setText(text);
+    setText(subsStr(text.text, text.startSel, newText));        
 }
 
 function alternateWords() {
