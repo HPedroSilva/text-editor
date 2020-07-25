@@ -1,35 +1,46 @@
-getText = () => document.getElementById('mainText').value;    
+function getText(getSelected = false) {
+    var text = {
+        text: '',
+        start: -1
+    };
+
+    if(getSelected == true && document.getSelection().toString() != '' && document.getSelection().anchorNode.id == 'mainText_div') {
+        text.text = document.getSelection().toString();
+        text.start = parseInt(document.getElementById('mainText').selectionStart);
+    } else {        
+        text.text = document.getElementById('mainText').value;    
+    }
+
+    return text;
+}
+
 setText = (text) => document.getElementById('mainText').value = text;
 
-getSelectedText = () => {
-    if (document.getSelection().toString() != '' && document.getSelection().anchorNode.id == 'mainText_div') {
-        return document.getSelection().toString();
+// function getSelectedText() {
+//     if (document.getSelection().toString() != '' && document.getSelection().anchorNode.id == 'mainText_div') {
+//         return document.getSelection().toString();
+//     }
+
+//     return false;
+// }
+
+function upper() {    
+    var text = getText(true);    
+
+    if (text.start != -1) {
+        setText(subsStr(text.text, text.start, text.text.toUpperCase()));
     } else {
-        return false;
+        setText(text.text.toUpperCase());
     }
 }
 
-function upper(){
-    var selText = getSelectedText();
-    var text = getText();
-    var selectionStart = document.getElementById('mainText').selectionStart
+function lower() {    
+    var text = getText(true);    
 
-    if (selText) {
-        setText(subsStr(text, selectionStart, selText.toUpperCase()));
+    if (text.start != -1) {
+        setText(subsStr(text.text, text.start, text.text.toLowerCase()));
     } else {
-        setText(getText().toUpperCase());
-    }
-}
-
-function lower(){    
-    var selText = getSelectedText();
-    var text = getText();
-    var selectionStart = document.getElementById('mainText').selectionStart
-
-    if (selText) {
-        setText(subsStr(text, selectionStart, selText.toLowerCase()));
-    } else {
-        setText(getText().toLowerCase());
+        setText(text.text.toLowerCase());
     }
 }
 
@@ -62,7 +73,7 @@ function upperPhrases() { // Coloca a primeira letra de uma frase em maiúscula,
         {text: '\\? ', len: 2},
         {text: '\t', len: 1},      
     ];
-    var text = getText();
+    var text = getText().text;
     var endPh = [];
 
     for(let i in separators) {
@@ -83,7 +94,7 @@ function upperWords() {
     var spaces;
     
     upperPhrases();
-    text = getText();
+    text = getText().text;
     spaces = finder(text, ' ');
 
     for(var i in spaces) {
@@ -97,7 +108,7 @@ function upperWords() {
 }
 
 function alternateLetters() {
-    var text = getText();
+    var text = getText().text;
 
     for(var i in text) {
         if(parseInt(i) % 2 == 0) {
@@ -112,7 +123,7 @@ function alternateWords() {
     var text;
     var spaces;
     
-    text = getText();
+    text = getText().text;
     spaces = finder(text, ' ');
 
     for(var i in spaces) {
@@ -136,7 +147,7 @@ function alternateWords() {
 
 function alternate() {
     
-    var text = getText();
+    var text = getText().text;
 
     for(var i in text) {
         let letter = text[parseInt(i)];
@@ -160,7 +171,7 @@ function replacing(all = false) {
     var regVal = '';
     var reg;
 
-    var text = getText();
+    var text = getText().text;
 
     if(all == true) {
         regVal = regVal + 'g';
