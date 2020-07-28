@@ -66,7 +66,7 @@ function subsStr(str, index, subs) { // Substitui uma substring em uma string, r
     return index >= str.length ? str : str.substr(0, index) + subs + str.substr(index + subs.length, str.length - 1);
 }
 
-function upperPhrases() { // Coloca a primeira letra de uma frase em maiúscula, mas falta implementar a separação de frases por pontuação.
+function upperPhrases() { 
     var separators = [ // Strings que indicam o fim de uma frase e o seu tamanho no texto.
         {text: '\n', len: 1},
         {text: '\\. ', len: 2},
@@ -74,20 +74,30 @@ function upperPhrases() { // Coloca a primeira letra de uma frase em maiúscula,
         {text: '\\? ', len: 2},
         {text: '\t', len: 1},      
     ];
-    var text = getText().text;
+    var text = getText(true);
+    var newText;
     var endPh = [];
 
+    if (text.startSel != -1) {
+        newText = text.selection;    
+    } else {
+        newText = text.text;
+        text.startSel = 0;
+    }
+
+    newText = subsStr(newText, 0, newText[0].toUpperCase()); // Colocando a primeira letra da frase em maiúscula.
+
     for(let i in separators) {
-        endPh = finder(text, separators[i].text);        
+        endPh = finder(newText, separators[parseInt(i)].text);        
         for(let j in endPh) {
-            let index = endPh[j] + separators[i].len; // O endPh[j] tem o índice do separador, mas o que desejamos substituir é a primeira letra após esse separador por isso a soma.          
-            text = subsStr(text, index, text[index].toUpperCase());
+            let index = endPh[parseInt(j)] + separators[parseInt(i)].len; // O endPh[j] tem o índice do separador, mas o que desejamos substituir é a primeira letra após esse separador por isso a soma.          
+            if(index < newText.length) {
+                newText = subsStr(newText, index, newText[index].toUpperCase());
+            }
         }
     }
 
-    text = subsStr(text, 0, text[0].toUpperCase());
-
-    setText(text);
+    setText(subsStr(text.text, text.startSel, newText)); 
 }
 
 function upperWords() {
