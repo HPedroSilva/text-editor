@@ -101,21 +101,32 @@ function upperPhrases() {
 }
 
 function upperWords() {
-    var text;
+    var text = getText(true);
     var spaces;
-    
-    upperPhrases();
-    text = getText().text;
-    spaces = finder(text, ' ');
+    var newText;
 
-    for(var i in spaces) {
-        let index = spaces[parseInt(i)] + 1;             
-        text = subsStr(text, index, text[index].toUpperCase());
+    if (text.startSel != -1) {
+        newText = text.selection;    
+    } else {
+        newText = text.text;
+        text.startSel = 0;
     }
 
-    text = subsStr(text, 0, text[0].toUpperCase());
+    spaces = finder(newText, ' ');
 
-    setText(text);
+     // Primeira letra
+     if(text.startSel == 0 || text.text[text.startSel - 1] == ' ') {
+         spaces.push(-1); //Primeira letra do texto (0) - 1, pois vai ser utilizado como um espaço.
+     }
+
+    for(var i in spaces) {
+        let index = spaces[parseInt(i)] + 1;
+        if(index < newText.length) {
+            newText = subsStr(newText, index, newText[index].toUpperCase());
+        }            
+    }
+
+    setText(subsStr(text.text, text.startSel, newText)); 
 }
 
 function alternateLetters() {
