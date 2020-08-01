@@ -69,12 +69,13 @@ function upperPhrases() {
     var text = getText(true);
     var newText;
     var endPh = [];
+    var startSel = text.startSel;
 
-    if (text.startSel != -1) {
+    if (startSel != -1) {
         newText = text.selection;    
     } else {
         newText = text.text;
-        text.startSel = 0;
+        startSel = 0;
     }
 
     newText = subsStr(newText, 0, newText[0].toUpperCase()); // Colocando a primeira letra da frase em maiúscula.
@@ -89,25 +90,26 @@ function upperPhrases() {
         }
     }
 
-    setText(subsStr(text.text, text.startSel, newText)); 
+    setText(subsStr(text.text, startSel, newText)); 
 }
 
 function upperWords() {
     var text = getText(true);
     var spaces;
     var newText;
+    var startSel = text.startSel;
 
-    if (text.startSel != -1) {
+    if (startSel != -1) {
         newText = text.selection;    
     } else {
         newText = text.text;
-        text.startSel = 0;
+        startSel = 0;
     }
 
     spaces = finder(newText, ' ');
 
      // Primeira letra
-     if(text.startSel == 0 || text.text[text.startSel - 1] == ' ') {
+     if(startSel == 0 || text.text[startSel - 1] == ' ') {
          spaces.push(-1); //Primeira letra do texto (0) - 1, pois vai ser utilizado como um espaço.
      }
 
@@ -118,18 +120,19 @@ function upperWords() {
         }            
     }
 
-    setText(subsStr(text.text, text.startSel, newText)); 
+    setText(subsStr(text.text, startSel, newText)); 
 }
 
 function alternateLetters() {
     var text = getText(true);
     var newText;
+    var startSel = text.startSel;
 
-    if (text.startSel != -1) {
+    if (startSel != -1) {
         newText = text.selection;    
     } else {
         newText = text.text;
-        text.startSel = 0;
+        startSel = 0;
     }
 
     for(var i in newText) {
@@ -138,7 +141,7 @@ function alternateLetters() {
         }        
     }
 
-    setText(subsStr(text.text, text.startSel, newText));        
+    setText(subsStr(text.text, startSel, newText));        
 }
 
 function alternateWords() {
