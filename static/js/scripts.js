@@ -15,15 +15,7 @@ function getText(getSelected = false) {
     return text;
 }
 
-setText = (text) => document.getElementById('mainText').value = text;
-
-// function getSelectedText() {
-//     if (document.getSelection().toString() != '' && document.getSelection().anchorNode.id == 'mainText_div') {
-//         return document.getSelection().toString();
-//     }
-
-//     return false;
-// }
+setText = (text) => document.getElementById('mainText').innerText = text;
 
 function upper() {    
     var text = getText(true);    
@@ -150,11 +142,19 @@ function alternateLetters() {
 }
 
 function alternateWords() {
-    var text;
+    var text = getText(true);
     var spaces;
-    
-    text = getText().text;
-    spaces = finder(text, ' ');
+    var newText;
+    var startSel = text.startSel;
+
+    if (startSel != -1) {
+        newText = text.selection;    
+    } else {
+        newText = text.text;
+        startSel = 0;
+    }
+
+    spaces = finder(newText, ' ');
 
     for(var i in spaces) {
         let index = spaces[parseInt(i)] + 1;
@@ -163,32 +163,41 @@ function alternateWords() {
             let tam;
 
             if(parseInt(i) == spaces.length - 1) {
-                tam = text.length - spaces[parseInt(i)] - 1;                
+                tam = newText.length - spaces[parseInt(i)] - 1;                
             } else {
                 tam = spaces[parseInt(i) + 1] - spaces[parseInt(i)] - 1;
             }
 
-            text = subsStr(text, index, text.substr(index, tam).toUpperCase());        
+            newText = subsStr(newText, index, newText.substr(index, tam).toUpperCase());        
         }           
     }
 
-    setText(text);
+    setText(subsStr(text.text, startSel, newText)); 
 }
 
 function alternate() {
     
-    var text = getText().text;
+    var text = getText(true);
+    var newText;
+    var startSel = text.startSel;
 
-    for(var i in text) {
-        let letter = text[parseInt(i)];
+    if (startSel != -1) {
+        newText = text.selection;    
+    } else {
+        newText = text.text;
+        startSel = 0;
+    }
+
+    for(var i in newText) {
+        let letter = newText[parseInt(i)];
         if(letter.toLowerCase() == letter) {
-            text = subsStr(text, parseInt(i), letter.toUpperCase());            
+            newText = subsStr(newText, parseInt(i), letter.toUpperCase());            
         } else {
-            text = subsStr(text, parseInt(i), letter.toLowerCase());        
+            newText = subsStr(newText, parseInt(i), letter.toLowerCase());        
         }
     }
 
-    setText(text);
+    setText(subsStr(text.text, startSel, newText)); 
 }
 
 // ----------------------
