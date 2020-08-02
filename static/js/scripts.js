@@ -228,6 +228,39 @@ function replacing(all = false) {
     setText(text);
 }
 
+// ----- Whatsapp Formatter -----------
+function wtsFormat(mark) {
+
+    var text = getText(true);
+    var newText;
+    var startSel = text.startSel;
+
+    if (startSel != -1) {
+        newText = text.selection;    
+    } else {
+       alert("Select some text!")
+       return false
+    }
+
+    newText = mark + newText + mark;
+
+    setText(subsStr(text.text, startSel, newText)); 
+}
+
+function updatePreview(mark = false) { // Quando uma modificação no texto for feita pelo wtsFormat ela é chamada recebendo o marcador (mark) utilizado.
+    var tags = [["*", "<b>", "</b>"], ["_", "<i>", "</i>"], ["~", "<s>", "</s>"], ["```", "<code>", "</code>"]];
+
+    var text = getText(true);
+    var newText;
+    var startSel = text.startSel;
+
+    if(mark != false) {
+        
+    }
+
+}
+
+
 document.getElementById('btn-1').addEventListener('click', upper);
 document.getElementById('btn-2').addEventListener('click', lower);
 document.getElementById('btn-3').addEventListener('click', upperWords);
@@ -237,3 +270,8 @@ document.getElementById('btn-6').addEventListener('click', alternateWords);
 document.getElementById('btn-7').addEventListener('click', alternate);
 document.getElementById('btn-8').addEventListener('click', () => {replacing(false);});
 document.getElementById('btn-9').addEventListener('click', () => {replacing(true);});
+
+document.getElementById('wts-btn-1').addEventListener('click', () => {wtsFormat("_");});
+document.getElementById('wts-btn-2').addEventListener('click', () => {wtsFormat("*");});
+document.getElementById('wts-btn-3').addEventListener('click', () => {wtsFormat("~");});
+document.getElementById('wts-btn-4').addEventListener('click', () => {wtsFormat("```");});
