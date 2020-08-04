@@ -247,19 +247,32 @@ function wtsFormat(mark) {
     setText(subsStr(text.text, startSel, newText)); 
 }
 
-function updatePreview(mark = false) { // Quando uma modificação no texto for feita pelo wtsFormat ela é chamada recebendo o marcador (mark) utilizado.
-    var tags = [["*", "<b>", "</b>"], ["_", "<i>", "</i>"], ["~", "<s>", "</s>"], ["```", "<code>", "</code>"]];
-
-    var text = getText(true);
-    var newText;
-    var startSel = text.startSel;
-
-    if(mark != false) {
-        
-    }
-
+function strInsert(str, i, insert) { // Insere a string insert na posição i da string str
+    return i > str.length ? str : str.slice(0, i) + insert + str.slice(i, str.length);
 }
 
+function updatePreview() { // Quando uma modificação no texto for feita pelo wtsFormat ela é chamada recebendo o marcador (mark) utilizado.
+    var tags = [["*", "<b>", "</b>"], ["_", "<i>", "</i>"], ["~", "<s>", "</s>"], ["```", "<code>", "</code>"]];
+    
+    var text = getText(true);
+    var newText = text.text;
+    
+    for (var j in tags) {
+        for (var i in newText) {
+            if (tags[parseInt(j)][0] == text[parseInt(i)]) {
+                if(ini != -1) {
+                    ini = parseInt(i);
+                } else {
+                    newText = strInsert(newText, ini, tags[parseInt(j)][1]);
+                    newText = strInsert(newText, parseInt(i), tags[parseInt(j)][2]);
+                    ini = -1;                
+                }
+            }
+        }
+    }
+
+    setText(newText); 
+}
 
 document.getElementById('btn-1').addEventListener('click', upper);
 document.getElementById('btn-2').addEventListener('click', lower);
