@@ -15,7 +15,7 @@ function getText(getSelected = false) {
     return text;
 }
 
-setText = (text) => document.getElementById('mainText').innerText = text;
+setText = (text) => document.getElementById('mainText').value = text;
 
 function upper() {    
     var text = getText(true);    
@@ -54,6 +54,7 @@ function finder(text, str) { // Recebe duas strings(text e str) e retorna os ín
 function subsStr(str, index, subs) { // Substitui uma substring em uma string, recebe a string, o indice onde será substituido e a substring. 
 // Falta tratar quando não recebe os argumentos, ou eles são do tipo errado.
 // Quando passa os índices finais retorna uma string maior
+// Não funciona bem quando a string subs é maior do que a que estava no seu lugar, pois ela irá substituir, e se for maior vai consumir as prócimas palavras.
     intex = parseInt(index);
     return index >= str.length ? str : str.substr(0, index) + subs + str.substr(index + subs.length, str.length - 1);
 }
@@ -242,13 +243,14 @@ function wtsFormat(mark) {
        return false
     }
 
+    ntLength = newText.length;
     newText = mark + newText + mark;
 
-    setText(subsStr(text.text, startSel, newText)); 
+    setText( text.text.slice(0, startSel) + newText + text.text.slice(startSel + ntLength, text.text.length) ); 
 }
 
-function strInsert(str, i, insert) { // Insere a string insert na posição i da string str
-    return i > str.length ? str : str.slice(0, i) + insert + str.slice(i, str.length);
+function tagInsert(str, i, tag) { // Insere a tag na posição i da string str substituindo o que estiver nessa posição
+    return i > str.length ? str : str.slice(0, i) + tag + str.slice(i + 1, str.length);
 }
 
 function updatePreview() { // Quando uma modificação no texto for feita pelo wtsFormat ela é chamada recebendo o marcador (mark) utilizado.
@@ -256,15 +258,19 @@ function updatePreview() { // Quando uma modificação no texto for feita pelo w
     
     var text = getText(true);
     var newText = text.text;
+    var ini = -1;
+    var count = 0;
     
     for (var j in tags) {
         for (var i in newText) {
-            if (tags[parseInt(j)][0] == text[parseInt(i)]) {
-                if(ini != -1) {
+            if (tags[parseInt(j)][0] == text.text[parseInt(i)]) {
+                if(ini == -1) {
                     ini = parseInt(i);
                 } else {
-                    newText = strInsert(newText, ini, tags[parseInt(j)][1]);
-                    newText = strInsert(newText, parseInt(i), tags[parseInt(j)][2]);
+                    newText = tagInsert(newText, ini + count, tags[parseInt(j)][1]);
+                    count += 3;
+                    newText = tagInsert(newText, parseInt(i) + count - 1, tags[parseInt(j)][2]);
+                    count += 3;
                     ini = -1;                
                 }
             }
