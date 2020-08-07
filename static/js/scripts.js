@@ -249,12 +249,12 @@ function wtsFormat(mark) {
     setText( text.text.slice(0, startSel) + newText + text.text.slice(startSel + ntLength, text.text.length) ); 
 }
 
-function tagInsert(str, i, tag) { // Insere a tag na posição i da string str substituindo o que estiver nessa posição
-    return i > str.length ? str : str.slice(0, i) + tag + str.slice(i + 1, str.length);
+function tagInsert(str, ini, end, tag) { // Insere a tag na posição ini e end da string str substituindo o cód referente à essa tag na str
+    return ini > str.length ? str : str.slice(0, ini) + tag[1] + str.slice(ini + tag[0].length, end) + tag[2] + str.slice(end + tag[0].length, str.length);
 }
 
 function updatePreview() { // Quando uma modificação no texto for feita pelo wtsFormat ela é chamada recebendo o marcador (mark) utilizado.
-    var tags = [["*", "<b>", "</b>"], ["_", "<i>", "</i>"], ["~", "<s>", "</s>"], ["```", "<code>", "</code>"]];
+    var tags = [["\\*", "<b>", "</b>"], ["\_", "<i>", "</i>"], ["\~", "<s>", "</s>"], ["```", "<code>", "</code>"]];
     
     var text = getText(true);
     var newText = text.text;
@@ -262,22 +262,24 @@ function updatePreview() { // Quando uma modificação no texto for feita pelo w
     var count = 0;
     
     for (var j in tags) {
-        for (var i in newText) {
-            if (tags[parseInt(j)][0] == text.text[parseInt(i)]) {
-                if(ini == -1) {
-                    ini = parseInt(i);
-                } else {
-                    newText = tagInsert(newText, ini + count, tags[parseInt(j)][1]);
-                    count += 3;
-                    newText = tagInsert(newText, parseInt(i) + count - 1, tags[parseInt(j)][2]);
-                    count += 3;
-                    ini = -1;                
-                }
-            }
+        var listTags = finder(newText, tags[parseInt(j)][0]);
+        for (var i in listTags) { 
+            count = 0;           
+            if(ini == -1) {
+                ini = listTags[parseInt(i)];
+            } else {
+                newText = tagInsert(newText, ini + count, listTags[parseInt(i)] + count, tags[parseInt(j)]);
+                count += tags[parseInt(j)][1].length + tags[parseInt(j)][2].length;                                
+                ini = -1;                
+            }            
         }
     }
 
-    setText(newText); 
+    var a = document.getElementById('wtsPreview');
+    a.innerHTML = newText;
+    a.style = 'display: block';
+    document.getElementById('mainText').style.height = "50%";
+    setText(newText);
 }
 
 document.getElementById('btn-1').addEventListener('click', upper);
