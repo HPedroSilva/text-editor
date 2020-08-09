@@ -247,29 +247,30 @@ function wtsFormat(mark) {
     newText = mark + newText + mark;
 
     setText( text.text.slice(0, startSel) + newText + text.text.slice(startSel + ntLength, text.text.length) ); 
+    updatePreview();
 }
 
 function tagInsert(str, ini, end, tag) { // Insere a tag na posição ini e end da string str substituindo o cód referente à essa tag na str
-    return ini > str.length ? str : str.slice(0, ini) + tag[1] + str.slice(ini + tag[0].length, end) + tag[2] + str.slice(end + tag[0].length, str.length);
+    return ini > str.length ? str : str.slice(0, ini) + tag[1] + str.slice(ini + tag[3], end) + tag[2] + str.slice(end + tag[3], str.length);
 }
 
 function updatePreview() { // Quando uma modificação no texto for feita pelo wtsFormat ela é chamada recebendo o marcador (mark) utilizado.
-    var tags = [["\\*", "<b>", "</b>"], ["\_", "<i>", "</i>"], ["\~", "<s>", "</s>"], ["```", "<code>", "</code>"]];
+    var tags = [["\\*", "<b>", "</b>", 1], ["\_", "<i>", "</i>", 1], ["\~", "<s>", "</s>", 1], ["```", "<code>", "</code>", 3]];
     
     var text = getText(true);
     var newText = text.text;
     var ini = -1;
-    var count = 0;
+    var count;
     
     for (var j in tags) {
         var listTags = finder(newText, tags[parseInt(j)][0]);
+        count = 0;           
         for (var i in listTags) { 
-            count = 0;           
             if(ini == -1) {
                 ini = listTags[parseInt(i)];
             } else {
                 newText = tagInsert(newText, ini + count, listTags[parseInt(i)] + count, tags[parseInt(j)]);
-                count += tags[parseInt(j)][1].length + tags[parseInt(j)][2].length;                                
+                count += tags[parseInt(j)][1].length + tags[parseInt(j)][2].length - tags[parseInt(j)][3] * 2;                                
                 ini = -1;                
             }            
         }
