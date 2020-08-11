@@ -73,7 +73,12 @@ function upperPhrases() {
     var startSel = text.startSel;
 
     if (startSel != -1) {
-        newText = text.selection;    
+        if(startSel > 1) { // Para pegar casos em que a seleção começa logo após um sinal com espaço, sem pegar quando a seleçãõ começa na primeira letra do texto.
+            newText = text.text.slice(startSel - 2, startSel) + text.selection; 
+            startSel = startSel - 2; 
+        } else {
+            newText = text.selection;
+        }
     } else {
         newText = text.text;
         startSel = 0;
