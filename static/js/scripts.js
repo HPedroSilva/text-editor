@@ -108,14 +108,17 @@ function upperWords() {
     }
 
     spaces = finder(newText, ' ');
+    wraps = finder(newText, '\n');
+
+    list = spaces.concat(wraps);
 
      // Primeira letra
      if(startSel == 0 || text.text[startSel - 1] == ' ') {
-         spaces.push(-1); //Primeira letra do texto (0) - 1, pois vai ser utilizado como um espaço.
+         list.push(-1); //Primeira letra do texto (0) - 1, pois vai ser utilizado como um espaço.
      }
 
-    for(var i in spaces) {
-        let index = spaces[parseInt(i)] + 1;
+    for(var i in list) {
+        let index = list[parseInt(i)] + 1;
         if(index < newText.length) {
             newText = subsStr(newText, index, newText[index].toUpperCase());
         }            
