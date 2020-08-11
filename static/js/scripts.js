@@ -77,9 +77,8 @@ function upperPhrases() {
     } else {
         newText = text.text;
         startSel = 0;
+        newText = subsStr(newText, 0, newText[0].toUpperCase()); // Colocando a primeira letra da frase em maiúscula.
     }
-
-    newText = subsStr(newText, 0, newText[0].toUpperCase()); // Colocando a primeira letra da frase em maiúscula.
 
     for(let i in separators) {
         endPh = finder(newText, separators[parseInt(i)].text);        
